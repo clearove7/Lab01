@@ -3,10 +3,10 @@ const { createApp, ref, computed } = Vue;
 createApp({
     setup() {
         const product = ref('Boots');
+        const brand = ref('SE 331');
         const des = ref('Park');
-        const image = ref('./assets/images/socks_green.jpg');
         const link = ref('http://www.camt.cmu.ac.th'); // Define the link URL here
-        let instock = ref(true);
+        const instock = ref(true);
         const inventory = ref(100);
         const details = ref([
             '50% cotton',
@@ -15,10 +15,40 @@ createApp({
             'Sizes: S, M, L' // Added sizes information
         ]);
         const variants = ref([
-            { id: 2234, color: 'green', image: './assets/images/socks_green.jpg' },
-            { id: 2235, color: 'blue', image: './assets/images/socks_blue.jpg' }
+            { id: 2234, color: 'green', image: './assets/images/socks_green.jpg', quantity: 50 },
+            { id: 2235, color: 'blue', image: './assets/images/socks_blue.jpg', quantity: 0 }
         ]);
+        const selectedVariant = ref(0);
         const cart = ref(0);
+        const onSale = ref(true); // Boolean to indicate if product is on sale
+
+        function updateVariant(index) {
+            selectedVariant.value = index;
+        }
+
+        // Computed property to dynamically get the image URL based on selected variant
+        const image = computed(() => {
+            return variants.value[selectedVariant.value].image;
+        });
+
+        // Computed property to dynamically check the stock status based on selected variant
+        const inStock = computed(() => {
+            return variants.value[selectedVariant.value].quantity > 0;
+        });
+
+        // Computed property for the product title
+        const title = computed(() => {
+            return brand.value + ' ' + product.value;
+        });
+
+        // Computed property to display sale message when onSale is true
+        const saleMessage = computed(() => {
+            if (onSale.value) {
+                return `${brand.value} ${product.value} is on sale`;
+            } else {
+                return '';
+            }
+        });
 
         function addToCart() {
             cart.value += 1;
@@ -32,15 +62,12 @@ createApp({
             instock.value = !instock.value;
         }
 
-        const onsale = ref(true); // Boolean to indicate if product is on sale
-
-        // Computed property to determine image class based on instock status
         const imageClass = computed(() => ({
-            'out-of-stock-image': !instock.value
+            'out-of-stock-image': !inStock.value
         }));
 
         return {
-            product,
+            title,
             des,
             image,
             instock,
@@ -48,12 +75,14 @@ createApp({
             details,
             variants,
             link,
-            onsale,
+            onSale,
             cart,
             addToCart,
             updateImage,
             toggleStock,
-            imageClass
+            imageClass,
+            updateVariant,
+            saleMessage
         };
     }
 }).mount('#app');
