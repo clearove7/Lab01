@@ -6,7 +6,7 @@ createApp({
         const des = ref('Park');
         const image = ref('./assets/images/socks_green.jpg');
         const link = ref('http://www.camt.cmu.ac.th'); // Define the link URL here
-        const inStock = ref(true);
+        let instock = ref(true);
         const inventory = ref(100);
         const details = ref([
             '50% cotton',
@@ -19,19 +19,26 @@ createApp({
             { id: 2235, color: 'blue', image: './assets/images/socks_blue.jpg' }
         ]);
         const cart = ref(0);
-         function addToCart() {
-            cart.value +=1
-         }
-         function updateImage(variantImage){
-            image.value = variantImage
-         }
+
+        function addToCart() {
+            cart.value += 1;
+        }
+
+        function updateImage(variantImage) {
+            image.value = variantImage;
+        }
+
+        function toggleStock() {
+            instock.value = !instock.value;
+        }
+
         const onsale = ref(true); // Boolean to indicate if product is on sale
-        
+
         return {
             product,
             des,
             image,
-            inStock,
+            instock,
             inventory,
             details,
             variants,
@@ -39,7 +46,8 @@ createApp({
             onsale,
             cart,
             addToCart,
-            updateImage
+            updateImage,
+            toggleStock
         };
     }
 }).mount('#app');
