@@ -1,4 +1,4 @@
-const { createApp, ref } = Vue;
+const { createApp, ref, computed } = Vue;
 
 createApp({
     setup() {
@@ -34,6 +34,11 @@ createApp({
 
         const onsale = ref(true); // Boolean to indicate if product is on sale
 
+        // Computed property to determine image class based on instock status
+        const imageClass = computed(() => ({
+            'out-of-stock-image': !instock.value
+        }));
+
         return {
             product,
             des,
@@ -47,7 +52,8 @@ createApp({
             cart,
             addToCart,
             updateImage,
-            toggleStock
+            toggleStock,
+            imageClass
         };
     }
 }).mount('#app');
