@@ -30,6 +30,8 @@ const productDisplay = {
         <button class="button" @click="removeFromCart">Remove from Cart</button>
 
     </div>
+    <review-list v-if="reviews.length" :reviews="reviews"></review-list>
+    <review-form @review-submitted="addReview"></review-form>
 </div>
 
     `,
@@ -115,6 +117,12 @@ const productDisplay = {
             }
         })
 
+        const reviews = ref([])
+
+        function addReview(review){
+            reviews.value.push(review)
+        }
+
         return{
             title,
             description,
@@ -133,7 +141,9 @@ const productDisplay = {
             updateVariant,
             salesStatus,
             shipping,
-            removeFromCart
+            removeFromCart,
+            reviews,
+            addReview
         }
     }
 }
