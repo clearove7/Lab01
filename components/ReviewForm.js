@@ -5,20 +5,20 @@ const reviewForm = {
     `<form class="review-form" @submit.prevent="onSubmit">
         <h3>Leave a review</h3>
         <label for="name">Name :</label>
-        <input id="name" v-model="form.name">
+        <input id="name" v-model="name">
 
         <label for="review">Review :</label>
-        <textarea id="review" v-model="form.review"></textarea>
+        <textarea id="review" v-model="review"></textarea>
 
         <label for="recommend">Would you recommend this product? :</label>
         <span>
-            <input type="checkbox" id="recommending" style="width:50%" />
+            <input type="checkbox" id="recommending" v-model="recommending" style="width:50%" />
             <label for="recommendded">Yes</label>
         </span>
         
 
         <label for="rating">Rating :</label>
-        <select id="rating" v-model.number="form.rating">
+        <select id="rating" v-model.number="rating">
             <option>5</option>
             <option>4</option>
             <option>3</option>
@@ -33,30 +33,30 @@ const reviewForm = {
         const form = reactive({
             name: '',
             review: '',
-            recommendded: Boolean,
+            recommending: Boolean,
             rating: null
         })
 
         function onSubmit(){
-            if(form.name === '' || form.review === '' || form.rating === null || form.recommendded === false){
+            if(form.name === '' || form.review === '' || form.rating === null || form.recommending === false){
                 alert('Review is incomplete. Please fill out every field.')
                 return
             }
             const productReview = {
                 name: form.name,
                 review: form.review,
-                recommendded: form.recommendded,
+                recommending: form.recommending,
                 rating: form.rating
             }
             emit('review-submitted', productReview)
             form.name = ''
             form.review = ''
-            form.recommendded === false,
+            form.recommending === false,
             form.rating = null
         }
     
         return{
-            form,
+            ...toRefs(form),
             onSubmit
         }
     }
